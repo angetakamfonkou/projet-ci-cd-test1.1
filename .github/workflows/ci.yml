@@ -31,3 +31,29 @@ jobs:
        with:
         api-key: rnd_uQwJBLbZUyZaG5nCohcvFOUMWiQo
         service id: srv-d5pieishg0os739jcbjg
+
+#TP Part 3 : Automatiser la détection (SCA)
+-CA - Audit des dépendances
+run: npm audit --audit-level=high
+#TP Part 4 : Automatiser la détection (SAST)
+-Scan du code source (Semgrep)
+ uses: semgrep/semgrep-action@v1
+ with:
+ config: p/javascript
+
+
+# --- NOTIFICATION EN CAS D'ÉCHEC ---
+- name: Notification d'échec (Discord)
+  if: failure()
+  run: |
+  # --- TP Part 5 : La Boucle de Rétroaction (Feedback) ---
+  echo "### ❌ Échec de la Pipeline de Sécurité" >> $GITHUB_STEP_SUMMARY
+
+  # Envoi d'un Webhook Discord
+  # Les étudiants doivent créer un Webhook dans Discord et l'ajouter en secret : DISCORD_WEBHOOK
+  curl -H "Content-Type: application/json" \
+     -X POST \
+     -d "{\"content\": \"Ça marche pas !\"}" \
+     ${{ secrets.DISCORD_WEBHOOK }}
+
+ 
